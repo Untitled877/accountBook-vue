@@ -19,7 +19,7 @@ export default class MoneyHeader extends Vue {
 @import "~@/assets/style/helper.scss";
 .header{
   font-size: 30px;
-  font-family: $font-kai;
+  font-family: 'haibao';
   font-weight: bold;
   display: flex;
   justify-content: center;

@@ -17,5 +17,19 @@ module.exports = {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     config.plugin('svg-sprite').use(require('svg-sprite-loader/plugin'), [{plainSprite:true}])
     config.module.rule('svg').exclude.add(dir)
-  }
+  },
+  css: {
+    loaderOptions: {
+      less: {
+        lessOptions: {
+          modifyVars: {
+            'primary-color': '#333333',
+            'link-color': '#333333',
+            'border-radius-base': '2px',
+          },
+          javascriptEnabled: true,
+        },
+      },
+    },
+  },
 }

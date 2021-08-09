@@ -74,7 +74,6 @@ export default class Tags extends Vue {
 
 <style lang="scss" scoped>
 .tagList {
-  border: 1px solid red;
   display: flex;
   flex-wrap: wrap;
   padding: 20px 10px;

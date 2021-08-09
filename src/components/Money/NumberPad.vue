@@ -6,7 +6,7 @@
       <button @click="inputContent">1</button>
       <button @click="inputContent">2</button>
       <button @click="inputContent">3</button>
-      <button @click="getCalendar">
+      <button @click="show = true">
         <Icon name="calendar"/>&nbsp;今天
       </button>
       <button @click="inputContent">4</button>
@@ -23,6 +23,7 @@
       <button @click="inputContent" class="zero">0</button>
       <button @click="ok" class="ok">确定</button>
     </div>
+    <van-calendar v-model="show" color="#333333" />
   </div>
 </template>
 
@@ -35,6 +36,7 @@ import Icon from '@/components/Icon.vue';
   components: {Icon}
 })
 export default class NumberPad extends Vue {
+  show =  false;
   inputContent() {
     window.alert('click');
   }
