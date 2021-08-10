@@ -1,6 +1,6 @@
 <template>
 <div class="header">
-  <p>记一笔帐</p>
+  记一笔账
 </div>
 </template>
 
@@ -18,13 +18,13 @@ export default class MoneyHeader extends Vue {
 <style lang="scss" scoped>
 @import "~@/assets/style/helper.scss";
 .header{
-  font-size: 30px;
+  font-size: 24px;
   font-family: 'haibao';
   font-weight: bold;
   display: flex;
-  justify-content: center;
   align-items: center;
-  padding: 5px 0;
+  justify-content: center;
   background: #f6f6f6;
+  padding: 5px 0;
 }
 </style>

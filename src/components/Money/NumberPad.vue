@@ -1,13 +1,12 @@
 <template>
   <div class="numberPad">
-
-    <div class="output">0</div>
+    <div class="output">{{ output }}</div>
     <div class="buttons">
       <button @click="inputContent">1</button>
       <button @click="inputContent">2</button>
       <button @click="inputContent">3</button>
-      <button @click="show = true">
-        <Icon name="calendar"/>&nbsp;今天
+      <button @click="showDatetimePicker = true">
+        {{createAt}}
       </button>
       <button @click="inputContent">4</button>
       <button @click="inputContent">5</button>
@@ -23,38 +22,76 @@
       <button @click="inputContent" class="zero">0</button>
       <button @click="ok" class="ok">确定</button>
     </div>
-    <van-calendar v-model="show" color="#333333" />
+    <van-popup v-model="showDatetimePicker" round position="bottom">
+      <van-datetime-picker
+          v-model="currentDate"
+          type="date"
+          title="选择年月日"
+          :min-date="minDate"
+          :max-date="maxDate"
+          @confirm="onConfirm"
+          @cancel="showDatetimePicker = false"
+
+      />
+    </van-popup>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
-import {Component} from 'vue-property-decorator';
+import {Component, Prop} from 'vue-property-decorator';
 import Icon from '@/components/Icon.vue';
+import dayjs from 'dayjs';
 
 @Component({
   components: {Icon}
 })
 export default class NumberPad extends Vue {
-  show =  false;
-  inputContent() {
-    window.alert('click');
-  }
+  @Prop(Number) readonly value !: number;
+  output = this.value.toString();
+  createAt = dayjs().format('YYYY/MM/DD');
 
-  getCalendar() {
-    window.alert('click');
+  showDatetimePicker = false;
+  minDate =  new Date(2020, 0, 1);
+  maxDate = new Date(2025, 10, 1);
+  currentDate = new Date();
+
+  inputContent(event:MouseEvent) {
+    const button = (event.target as HTMLButtonElement);
+    const input = button.textContent!;
+    if(this.output.length === 16) { return; }
+    if(this.output === '0') {
+      if('0123456789'.indexOf(input) >= 0) {
+        this.output = input;
+      } else {
+        this.output += input;
+      }
+      return;
+    }
+    if(this.output.indexOf('.') >= 0 && input === '.') { return; }
+    this.output += input;
   }
 
   remove() {
-    window.alert('click');
+    if(this.output.length === 1) {
+      this.output = '0';
+    } else {
+      this.output = this.output.slice(0, -1);
+    }
   }
 
   clear() {
-    window.alert('click');
+    this.output = '0';
+  }
+
+  onConfirm(value:string) {
+    this.createAt = dayjs(value).format('YYYY/MM/DD');
+    this.showDatetimePicker = false;
   }
 
   ok() {
-    window.alert('click');
+    // TODO 讲本次记录的内容提交。
+    window.alert('提交');
   }
 }
 
@@ -80,6 +117,7 @@ export default class NumberPad extends Vue {
       width: 25%;
       font-size: 20px;
       padding: 10px 0;
+      line-height: 30px;
       float: left;
       background: transparent;
       border: none;
@@ -105,10 +143,15 @@ export default class NumberPad extends Vue {
       &:nth-child(13), &:nth-child(14) {
         border-right: 1px solid rgba(187, 187, 187, 0.7);
       }
-
       &:nth-child(15) {
         background: #333333;
         color: white;
+      }
+      &:nth-child(4), &:nth-child(12),&:nth-child(15) {
+        font-size: 16px;
+      }
+      &:nth-child(4) {
+        background: #f6f6f6;
       }
     }
   }

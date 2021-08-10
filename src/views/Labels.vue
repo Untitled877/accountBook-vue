@@ -72,8 +72,7 @@ nav {
     font-size: 24px;
     font-family: 'haibao', $font-kai;
     font-weight: bold;
-    margin-top: 5px;
-    margin-bottom: 10px;
+    margin: 5px 0;
   }
 }
 

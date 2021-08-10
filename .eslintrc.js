@@ -17,6 +17,12 @@ module.exports = {
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "@typescript-eslint/no-non-null-assertion": "off"
   },
+  globals: {
+    "RecordItem": true,
+    "RootState": true,
+    "Tag": true,
+    "DefaultTag":true,
+  },
   overrides: [
     {
       files: [

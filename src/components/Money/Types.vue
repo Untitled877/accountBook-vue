@@ -1,11 +1,9 @@
 <template>
   <ul class="types">
-    <li class="selected">支出</li>
-    <li>收入</li>
-<!--    <li :class="value === '-' && 'selected'"-->
-<!--    @click="selectType('-')">支出</li>-->
-<!--    <li :class="value === '+' && 'selected'"-->
-<!--    @click="selectType('+')">收入</li>-->
+    <li :class="value === '-' && 'selected'"
+    @click="selectType('-')">支出</li>
+    <li :class="value === '+' && 'selected'"
+    @click="selectType('+')">收入</li>
   </ul>
 </template>
 
