@@ -2,9 +2,9 @@
   <Layout>
     <nav class="title">账单详情</nav>
     <AccountInfo/>
-
     <div class="tabs-wrapper">
-      <Tabs/>
+      <Tabs :data-source="accountTypeList" :value.sync="type"
+            class-prefix="type"/>
     </div>
     <ol v-show="hasRecordList === true" class="records">
       <li>
@@ -35,12 +35,15 @@ import Layout from '@/components/Layout.vue';
 
 import AccountInfo from '@/components/AccountInfo.vue';
 import Tabs from '@/components/Tabs.vue';
+import accountTypeList from '@/constants/accountTypeList';
 
 @Component({
   components: {AccountInfo, Layout, Tabs}
 })
 export default class Statistics extends Vue {
   hasRecordList = true;
+  accountTypeList = accountTypeList;
+  type = 'details';
 
 }
 

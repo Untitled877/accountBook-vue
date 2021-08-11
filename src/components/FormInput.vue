@@ -17,7 +17,7 @@ import {Component, Prop} from 'vue-property-decorator';
 @Component
 export default class FormInput extends Vue {
   @Prop({default: ''})  readonly value !: string;
-  @Prop({require: true}) labelName !: string;
+  @Prop({required: true}) labelName !: string;
   @Prop() placeholder ?: string;
 
   onValueChanged(value:string) {

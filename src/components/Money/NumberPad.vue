@@ -31,7 +31,6 @@
           :max-date="maxDate"
           @confirm="onConfirm"
           @cancel="showDatetimePicker = false"
-
       />
     </van-popup>
   </div>
@@ -90,8 +89,14 @@ export default class NumberPad extends Vue {
   }
 
   ok() {
-    // TODO 讲本次记录的内容提交。
-    window.alert('提交');
+    const number = parseFloat(this.output);
+    this.$emit('update:value', number);
+    this.$emit('update',this.createAt);
+    this.$emit('submit', number);
+    if(!this.$store.state.createRecordError) {
+      this.output = '0';
+      this.createAt = dayjs().format('YYYY/MM/DD');
+    }
   }
 }
 

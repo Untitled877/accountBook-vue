@@ -22,7 +22,7 @@ type RootState = {
   expend_tagList: Tag[],
   income_tagList: Tag[],
   createTagError: Error | null,
+  createRecordError: Error | null,
   currentTag?: Tag,
-  default_expend_tags: DefaultTag[],
-  default_income_tags: DefaultTag[]
+  selectedTag: Tag,
 }

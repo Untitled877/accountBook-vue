@@ -2,15 +2,16 @@
   <Layout>
     <nav>
       <p class="title">标签管理</p>
-      <Tabs/>
+      <Tabs :data-source="recordTypeList" :value.sync="type"
+       class-prefix="type"/>
     </nav>
     <div class="labels">
       <router-link
           class="label"
-          v-for="item in tagNames"
+          v-for="item in tagList"
           :key="item.id"
-          :to="`/labels/edit/${item.id}`">
-        <span>{{ item.name }}</span>
+          :to="`/labels/edit/${type}/${item.id}`">
+        <span>{{ item.text }}</span>
         <Icon name="right"/>
       </router-link>
     </div>
@@ -27,33 +28,31 @@ import Layout from '@/components/Layout.vue';
 import Tabs from '@/components/Tabs.vue';
 import Icon from '@/components/Icon.vue';
 import Button from '@/components/Button.vue';
+import recordTypeList from '@/constants/recordTypeList';
 
 @Component({
   components: {Button, Icon, Layout, Tabs}
 })
 export default class Tags extends Vue {
-  tagNames = [
-    {
-      id: 1,
-      name: '餐饮'
-    },
-    {
-      id: 2,
-      name: '娱乐'
-    },
-    {
-      id: 3,
-      name: '住房'
-    },
-    {
-      id: 4,
-      name: '购物'
-    },
-    {
-      id: 5,
-      name: '服装'
-    },
-  ];
+  recordTypeList = recordTypeList;
+  type = '-';
+  get tagList() {
+    return this.type === '-' ? this.expend_tagList : this.income_tagList;
+  }
+
+  get expend_tagList() {
+    return this.$store.state.expend_tagList;
+  }
+
+  get income_tagList() {
+    return this.$store.state.income_tagList;
+  }
+
+  beforeCreate() {
+    this.$store.commit('fetchTags');
+  }
+
+
 }
 
 </script>

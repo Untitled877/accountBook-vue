@@ -1,15 +1,18 @@
 <template>
   <Layout>
     <nav>
-      <Icon name="left" class="leftIcon"/>
+      <Icon name="left" class="leftIcon" @click="goBack"/>
       <span class="title">编辑标签</span>
       <span class="rightIcon"></span>
     </nav>
     <div class="form-wrapper">
-      <FormInput></FormInput>
+      <FormInput :value="currentTag.text"
+                 @update:value="update"
+                 label-name="标签名："
+                 placeholder="请输入标签名"/>
     </div>
     <div class="button-wrapper">
-      <Button>删除标签</Button>
+      <Button @click="remove">删除标签</Button>
     </div>
   </Layout>
 </template>
@@ -26,7 +29,37 @@ import Button from '@/components/Button.vue';
   components: {Button, FormInput, Icon, Layout}
 })
 export default class EditTag extends Vue {
+  get currentTag() {
+    return this.$store.state.currentTag;
+  }
 
+  created() {
+    const id = this.$route.params.id;
+    const type = this.$route.params.type;
+    this.$store.commit('fetchTags');
+    this.$store.commit('setCurrentTag', {type:type, id:id});
+    if (!this.currentTag) {
+      this.$router.replace('/404');
+    }
+  }
+
+  update(text: string) {
+    if (this.currentTag) {
+      this.$store.commit('updateTag',
+          {type: this.$route.params.type, id: this.currentTag.id, text:text});
+    }
+  }
+
+  remove() {
+    if (this.currentTag) {
+      this.$store.commit('removeTag',
+          {id: this.currentTag.id, type:this.$route.params.type});
+    }
+  }
+
+  goBack() {
+    this.$router.back();
+  }
 }
 
 </script>
@@ -41,19 +74,23 @@ nav {
   display: flex;
   align-items: center;
   justify-content: space-between;
+
   svg {
     width: 24px;
     height: 24px;
   }
-  .rightIcon{
+
+  .rightIcon {
     width: 24px;
     height: 24px;
   }
 }
+
 .form-wrapper ::v-deep label {
   border: none;
   border-bottom: 1px solid rgba(187, 187, 187, 0.7);
 }
+
 .button-wrapper {
   text-align: center;
   padding: 16px;
