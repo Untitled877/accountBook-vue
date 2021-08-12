@@ -1,18 +1,20 @@
 <template>
   <Layout>
-    <nav>
-      <Icon name="left" class="leftIcon" @click="goBack"/>
-      <span class="title">编辑标签</span>
-      <span class="rightIcon"></span>
-    </nav>
-    <div class="form-wrapper">
-      <FormInput :value="currentTag.text"
-                 @update:value="update"
-                 label-name="标签名："
-                 placeholder="请输入标签名"/>
-    </div>
-    <div class="button-wrapper">
-      <Button @click="remove">删除标签</Button>
+    <div class="middleContent">
+      <nav>
+        <Icon name="left" class="leftIcon" @click="goBack"/>
+        <span class="title">编辑标签</span>
+        <span class="rightIcon"></span>
+      </nav>
+      <div class="form-wrapper">
+        <FormInput :value="currentTag.text"
+                   @update:value="update"
+                   label-name="标签名："
+                   placeholder="请输入标签名"/>
+      </div>
+      <div class="button-wrapper">
+        <Button @click="remove">删除标签</Button>
+      </div>
     </div>
   </Layout>
 </template>
@@ -37,7 +39,7 @@ export default class EditTag extends Vue {
     const id = this.$route.params.id;
     const type = this.$route.params.type;
     this.$store.commit('fetchTags');
-    this.$store.commit('setCurrentTag', {type:type, id:id});
+    this.$store.commit('setCurrentTag', {type: type, id: id});
     if (!this.currentTag) {
       this.$router.replace('/404');
     }
@@ -46,14 +48,14 @@ export default class EditTag extends Vue {
   update(text: string) {
     if (this.currentTag) {
       this.$store.commit('updateTag',
-          {type: this.$route.params.type, id: this.currentTag.id, text:text});
+          {type: this.$route.params.type, id: this.currentTag.id, text: text});
     }
   }
 
   remove() {
     if (this.currentTag) {
       this.$store.commit('removeTag',
-          {id: this.currentTag.id, type:this.$route.params.type});
+          {id: this.currentTag.id, type: this.$route.params.type});
     }
   }
 
@@ -65,10 +67,16 @@ export default class EditTag extends Vue {
 </script>
 
 <style lang="scss" scoped>
+@import "~@/assets/style/helper.scss";
+.middleContent {
+  flex-grow: 1;
+  overflow: auto;
+}
+
 nav {
   background: #f6f6f6;
   font-size: 24px;
-  font-family: 'haibao';
+  font-family: 'haibao', $font-hei;
   text-align: center;
   padding: 12px 16px;
   display: flex;

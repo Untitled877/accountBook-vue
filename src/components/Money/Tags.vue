@@ -12,11 +12,11 @@
             </div>
             <span>{{ item.text }}</span>
           </li>
-          <li v-show="i === getExpendItemNum()" @click="createTag">
+          <li v-show="i === getExpendItemNum()" @click="createTag(type)">
             <div class="icon-wrapper">
               <Icon name="add" class="icon"/>
             </div>
-            <span>新增标签</span>
+            <span>自定义</span>
           </li>
         </ol>
       </van-swipe-item>
@@ -33,11 +33,11 @@
             </div>
             <span>{{ item.text }}</span>
           </li>
-          <li v-show="i === getIncomeItemNum()" @click="createTag">
+          <li v-show="i === getIncomeItemNum()" @click="createTag(type)">
             <div class="icon-wrapper">
               <Icon name="add" class="icon"/>
             </div>
-            <span>新增标签</span>
+            <span>自定义</span>
           </li>
         </ol>
       </van-swipe-item>
@@ -47,14 +47,15 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
 import {Component, Prop} from 'vue-property-decorator';
 import Icon from '@/components/Icon.vue';
+import {mixins} from 'vue-class-component';
+import TagHelper from '@/mixins/tagHelper';
 
 @Component({
   components: {Icon}
 })
-export default class Tags extends Vue {
+export default class Tags extends mixins(TagHelper) {
   @Prop(String) readonly type !: string;
   get selectedTag() {
     return this.$store.state.selectedTag;
@@ -95,21 +96,6 @@ export default class Tags extends Vue {
     }
     return result;
   };
-  map: { [key: string]: string } = {
-    'tag name duplicated': '标签重复'
-  };
-
-  createTag() {
-    const text = window.prompt('请输入标签名（最多四个字）');
-    if (!text) { return window.alert('标签名不能为空！'); }
-    this.$store.commit('createTag', {type: this.type, text});
-    if (this.$store.state.createTagError) {
-      window.alert(this.map[this.$store.state.createTagError.message]
-          || '未知错误');
-    } else {
-      window.alert('添加成功！');
-    }
-  }
 }
 
 </script>

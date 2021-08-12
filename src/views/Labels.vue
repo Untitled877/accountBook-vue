@@ -5,35 +5,38 @@
       <Tabs :data-source="recordTypeList" :value.sync="type"
        class-prefix="type"/>
     </nav>
-    <div class="labels">
-      <router-link
-          class="label"
-          v-for="item in tagList"
-          :key="item.id"
-          :to="`/labels/edit/${type}/${item.id}`">
-        <span>{{ item.text }}</span>
-        <Icon name="right"/>
-      </router-link>
-    </div>
-    <div class="createLabel-wrapper">
-      <Button class="createLabel">添加标签</Button>
+    <div class="middleContent">
+      <div class="labels">
+        <router-link
+            class="label"
+            v-for="item in tagList"
+            :key="item.id"
+            :to="`/labels/edit/${type}/${item.id}`">
+          <span>{{ item.text }}</span>
+          <Icon name="right"/>
+        </router-link>
+      </div>
+      <div class="createLabel-wrapper">
+        <Button class="createLabel" @click="createTag(type)">添加标签</Button>
+      </div>
     </div>
   </Layout>
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
 import {Component} from 'vue-property-decorator';
 import Layout from '@/components/Layout.vue';
 import Tabs from '@/components/Tabs.vue';
 import Icon from '@/components/Icon.vue';
 import Button from '@/components/Button.vue';
 import recordTypeList from '@/constants/recordTypeList';
+import {mixins} from 'vue-class-component';
+import TagHelper from '@/mixins/tagHelper';
 
 @Component({
   components: {Button, Icon, Layout, Tabs}
 })
-export default class Tags extends Vue {
+export default class Tags extends mixins(TagHelper) {
   recordTypeList = recordTypeList;
   type = '-';
   get tagList() {
@@ -51,14 +54,16 @@ export default class Tags extends Vue {
   beforeCreate() {
     this.$store.commit('fetchTags');
   }
-
-
 }
 
 </script>
 
 <style lang="scss" scoped>
 @import "~@/assets/style/helper.scss";
+.middleContent{
+    flex-grow: 1;
+    overflow: auto;
+  }
 
 nav {
   background: #f6f6f6;

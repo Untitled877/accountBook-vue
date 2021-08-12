@@ -96,6 +96,7 @@ export default class NumberPad extends Vue {
     if(!this.$store.state.createRecordError) {
       this.output = '0';
       this.createAt = dayjs().format('YYYY/MM/DD');
+      this.currentDate = new Date();
     }
   }
 }

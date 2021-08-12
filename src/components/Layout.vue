@@ -1,8 +1,8 @@
 <template>
 <div class="layout-wrapper" :class="classPrefix && `${classPrefix}-wrapper`">
-  <div class="content" :class="classPrefix && `${classPrefix}-content`">
+<!--  <div class="content" :class="classPrefix && `${classPrefix}-content`">-->
     <slot/>
-  </div>
+<!--  </div>-->
   <BottomNav />
 </div>
 </template>
@@ -26,7 +26,7 @@ export default class Layout extends Vue {
   flex-direction: column;
   height: 100vh;
 }
-.content {
-  flex-grow: 1;
-}
+//.content {
+//  flex-grow: 1;
+//}
 </style>
