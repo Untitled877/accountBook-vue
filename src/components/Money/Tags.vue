@@ -114,6 +114,9 @@ export default class Tags extends mixins(TagHelper) {
     padding: 0 20px;
     width: 25%;
     font-size: 12px;
+    > span{
+      white-space: nowrap;
+    }
 
     &.selected {
       .icon-wrapper {
@@ -131,6 +134,12 @@ export default class Tags extends mixins(TagHelper) {
         height: 40px;
         width: 40px;
         margin: 10px;
+      }
+      @media (max-height: 600px) {
+        .icon {
+          height: 35px;
+          width: 35px;
+        }
       }
     }
   }

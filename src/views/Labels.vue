@@ -1,7 +1,6 @@
 <template>
-  <Layout>
+  <Layout :style="{height:h+'px'}">
     <nav>
-      <p class="title">标签管理</p>
       <Tabs :data-source="recordTypeList" :value.sync="type"
        class-prefix="type"/>
     </nav>
@@ -37,6 +36,7 @@ import TagHelper from '@/mixins/tagHelper';
   components: {Button, Icon, Layout, Tabs}
 })
 export default class Tags extends mixins(TagHelper) {
+  h = document.documentElement.clientHeight;
   recordTypeList = recordTypeList;
   type = '-';
   get tagList() {
@@ -70,14 +70,8 @@ nav {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-bottom: 10px;
+  padding: 20px 0;
 
-  > .title {
-    font-size: 24px;
-    font-family: 'haibao', $font-kai;
-    font-weight: bold;
-    margin: 5px 0;
-  }
 }
 
 .labels {

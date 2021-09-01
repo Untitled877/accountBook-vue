@@ -1,5 +1,5 @@
 <template>
-  <Layout>
+  <Layout :style="{height:h+'px'}">
     <div class="middleContent">
       <nav>
         <Icon name="left" class="leftIcon" @click="goBack"/>
@@ -10,7 +10,7 @@
         <FormInput :value="currentTag.text"
                    @update:value="update"
                    label-name="标签名："
-                   placeholder="请输入标签名"/>
+                   placeholder="最好不要超过四个字哦~"/>
       </div>
       <div class="button-wrapper">
         <Button @click="remove">删除标签</Button>
@@ -31,6 +31,7 @@ import Button from '@/components/Button.vue';
   components: {Button, FormInput, Icon, Layout}
 })
 export default class EditTag extends Vue {
+  h = document.documentElement.clientHeight;
   get currentTag() {
     return this.$store.state.currentTag;
   }
@@ -54,8 +55,10 @@ export default class EditTag extends Vue {
 
   remove() {
     if (this.currentTag) {
-      this.$store.commit('removeTag',
-          {id: this.currentTag.id, type: this.$route.params.type});
+      if(window.confirm('确定删除该标签吗？')) {
+        this.$store.commit('removeTag',
+            {id: this.currentTag.id, type: this.$route.params.type});
+      }
     }
   }
 

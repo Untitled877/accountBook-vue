@@ -14,6 +14,9 @@ body {
   font-family: $font-hei;
   color: #333;
   background: white;
+  max-width: 450px;
+  margin-left: auto !important;
+  margin-right: auto !important;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

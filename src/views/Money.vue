@@ -1,7 +1,6 @@
 <template>
-  <Layout>
+  <Layout :style="{height:h+'px'}">
     <div class="header">
-      <p class="title">记一笔账</p>
       <Tabs :data-source="recordTypeList" :value.sync="record.type"
             class-prefix="type"/>
     </div>
@@ -32,6 +31,7 @@ import recordTypeList from '@/constants/recordTypeList';
   components: {Tags, FormInput, Tabs, NumberPad, Layout}
 })
 export default class Money extends Vue {
+  h = document.documentElement.clientHeight;
   recordTypeList = recordTypeList;
   record: RecordItem = {
     tag: {id: '', name: '', text: ''},
@@ -82,14 +82,8 @@ export default class Money extends Vue {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-bottom: 10px;
+  padding: 20px;
 
-  > .title {
-    font-size: 24px;
-    font-family: 'haibao', $font-kai;
-    font-weight: bold;
-    margin: 5px 0;
-  }
 }
 
 .middleContent {

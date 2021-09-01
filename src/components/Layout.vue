@@ -1,21 +1,20 @@
 <template>
-<div class="layout-wrapper" :class="classPrefix && `${classPrefix}-wrapper`">
-<!--  <div class="content" :class="classPrefix && `${classPrefix}-content`">-->
+  <div class="layout-wrapper" :class="classPrefix && `${classPrefix}-wrapper`">
     <slot/>
-<!--  </div>-->
-  <BottomNav />
-</div>
+    <BottomNav/>
+  </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
 import {Component, Prop} from 'vue-property-decorator';
 import BottomNav from '@/components/BottomNav.vue';
+
 @Component({
   components: {BottomNav}
 })
 export default class Layout extends Vue {
-  @Prop(String) classPrefix!:string;
+  @Prop(String) classPrefix!: string;
 }
 
 </script>
@@ -26,7 +25,4 @@ export default class Layout extends Vue {
   flex-direction: column;
   height: 100vh;
 }
-//.content {
-//  flex-grow: 1;
-//}
 </style>

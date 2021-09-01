@@ -8,9 +8,10 @@ const map: { [key: string]: string } = {
 @Component
 export class TagHelper extends Vue {
   createTag(type:string) {
-    let text = window.prompt('请输入标签名（不超过三个字）');
+    let text = window.prompt('请输入标签名（不超过四个字）');
     if (!text) { return window.alert('标签名不能为空！'); }
-    text = text.substr(0, 3);
+    if(text.length > 4) { return window.alert('标签名不可超过四个字'); }
+    text = text.substr(0, 4);
     this.$store.commit('createTag', {type: type, text});
     if (this.$store.state.createTagError) {
       window.alert(map[this.$store.state.createTagError.message]

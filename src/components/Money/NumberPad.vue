@@ -114,6 +114,11 @@ export default class NumberPad extends Vue {
     text-align: right;
     border-top: 1px solid rgba(187, 187, 187, 0.7);
   }
+  @media (max-height: 600px) {
+    .output {
+      font-size: 25px;
+    }
+  }
 
   .buttons {
     @extend %clearFix;
@@ -158,6 +163,11 @@ export default class NumberPad extends Vue {
       }
       &:nth-child(4) {
         background: #f6f6f6;
+      }
+    }
+    @media (max-height: 600px) {
+      > button {
+        line-height: 20px;
       }
     }
   }

@@ -1,6 +1,5 @@
 <template>
-  <Layout>
-    <nav class="title">账单详情</nav>
+  <Layout :style="{height:h+'px'}">
     <AccountInfo :year.sync="year"
                  :month.sync="month"
                  :totalExpend="monthTotalExpend"
@@ -9,25 +8,29 @@
       <Tabs :data-source="accountTypeList" :value.sync="type"
             class-prefix="type"/>
     </div>
-    <div class="items">
-      <ol v-show="type==='details' && groupedRecords.length > 0" class="records">
-        <li v-for="(group, index) in groupedRecords" :key="index">
-          <div class="topBar">
-            {{ beautify(group.title) }}
-            <span>支出：{{ group.totalExpend }} 收入：{{ group.totalIncome }}</span>
-          </div>
-          <ol>
-            <li class="record" v-for="item in group.items" :key="item.id">
-              <span>{{ item.tag.text }}</span>
-              <span class="notes">{{ item.notes }}</span>
-              <span class="amount">{{ item.type }}{{ item.amount }}</span>
-            </li>
-          </ol>
-        </li>
-      </ol>
-      <div class="charts" v-show="type === 'chart' && groupedRecords.length > 0"></div>
-      <div class="empty" v-show="groupedRecords.length === 0">
-        本月还没有账单记录哦~
+    <div  class="items">
+      <div v-if="type==='details'">
+        <ol class="records">
+          <li v-for="(group, index) in groupedRecords" :key="index">
+            <div class="topBar">
+              {{ beautify(group.title) }}
+              <span>支出：{{ group.totalExpend }} 收入：{{ group.totalIncome }}</span>
+            </div>
+            <ol>
+              <li class="record" v-for="item in group.items" :key="item.id">
+                <span class="tagName">{{ item.tag.text }}</span>
+                <span class="notes">{{ item.notes }}</span>
+                <span class="amount">{{ item.type }}{{ item.amount }}</span>
+              </li>
+            </ol>
+          </li>
+        </ol>
+        <div class="empty" v-show="groupedRecords.length === 0">
+          本月还没有账单记录哦~
+        </div>
+      </div>
+      <div class="charts" v-else>
+        <Chart :componentKey="componentKey" :options="chartOptions" :value.sync="category"/>
       </div>
     </div>
   </Layout>
@@ -35,7 +38,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import {Component} from 'vue-property-decorator';
+import {Component, Watch} from 'vue-property-decorator';
 import Layout from '@/components/Layout.vue';
 
 import AccountInfo from '@/components/AccountInfo.vue';
@@ -43,17 +46,40 @@ import Tabs from '@/components/Tabs.vue';
 import accountTypeList from '@/constants/accountTypeList';
 import dayjs from 'dayjs';
 import clone from '@/lib/clone';
+import Chart from '@/components/Chart.vue';
 
 @Component({
-  components: {AccountInfo, Layout, Tabs}
+  components: {Chart, AccountInfo, Layout, Tabs}
 })
 export default class Statistics extends Vue {
+  h = document.documentElement.clientHeight;
   accountTypeList = accountTypeList;
   type = 'details';
   year = dayjs().year();
   month = dayjs().month() + 1;
   monthTotalExpend = 0.00;
   monthTotalIncome = 0.00;
+  category = '-';
+  componentKey = 0;
+
+  forceRerender() {
+    this.componentKey += 1;
+  }
+
+  get changeDate() {
+    const {category, type, year, month} = this;
+    return {
+      category,
+      type,
+      year,
+      month,
+    };
+  }
+
+  @Watch('changeDate')
+  update() {
+    this.forceRerender();
+  }
 
   beforeCreate() {
     this.$store.commit('fetchRecords');
@@ -121,20 +147,66 @@ export default class Statistics extends Vue {
       return string;
     }
   }
+
+  get keyValueList() {
+    const {recordList} = this;
+    const hash: { [K: string]: number } = {};
+    const newList = clone(recordList);
+    const classifiedList = newList.filter(r => parseInt(r.createAt.split('/')[0]) === this.year
+        && parseInt(r.createAt.split('/')[1]) === this.month && r.type === this.category);
+    classifiedList.forEach(r => {
+      const key = r.tag.text;
+      if (key in hash) {
+        hash[key] += r.amount;
+      } else {
+        hash[key] = r.amount;
+      }
+    });
+    return hash;
+  }
+
+  get chartOptions() {
+    const keys = Object.keys(this.keyValueList);
+    const values = Object.values(this.keyValueList);
+    return {
+      color: '#999',
+      grid: {
+        top: 20,
+        bottom: 45
+      },
+      xAxis: {
+        type: 'category',
+        data: keys,
+        axisLabel: {
+          interval: 0,
+          rotate: 22
+        }
+      },
+      yAxis: {
+        type: 'value',
+        show: false
+      },
+      series: [{
+        data: values,
+        type: 'bar',
+        label: {
+          show: true,
+          position: 'top'
+        },
+      }],
+    };
+  }
+
+  @Watch('type')
+  onTypeChange() {
+    this.keyValueList;
+  }
 }
 
 </script>
 
 <style lang="scss" scoped>
 @import "~@/assets/style/helper.scss";
-nav {
-  background: #f6f6f6;
-  font-size: 24px;
-  font-family: 'haibao', $font-kai;
-  font-weight: bold;
-  text-align: center;
-  padding: 5px 0;
-}
 
 .tabs-wrapper {
   margin: 10px 0;
@@ -147,7 +219,8 @@ nav {
   align-items: center;
   border-bottom: 1px solid rgba(187, 187, 187, 0.7);
 }
-.items{
+
+.items {
   flex-grow: 1;
   overflow: auto;
 
@@ -158,6 +231,10 @@ nav {
 
   .record {
     @extend %item;
+  }
+
+  .tagName {
+    white-space: nowrap;
   }
 
   .notes {
